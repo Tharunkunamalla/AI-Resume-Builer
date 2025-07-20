@@ -1,4 +1,5 @@
 <svg width="1880" height="1866" viewBox="0 0 1880 1866" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g clip-path="url(#clip0_6_58)">
 <path d="M1880 0H0V1866H1880V0Z" fill="#FDDBFF"/>
 <path d="M940 233.25L0 466.5V1866H1880V466.5L940 233.25Z" fill="#F4C6FC" fill-opacity="0.8"/>
 <path d="M940 466.5L0 933V1866H1880V933L940 466.5Z" fill="#EAB1F9" fill-opacity="0.8"/>
@@ -7,4 +8,21 @@
 <path d="M1504 1866L940 1166.25L376 1866H1504Z" fill="#CA71EF" fill-opacity="0.8"/>
 <path d="M626.627 1866H1253.37L940 1399.5L626.627 1866Z" fill="#BE5AEC" fill-opacity="0.8"/>
 <path d="M803.818 1866H1074.3L940 1632.75L803.818 1866Z" fill="#B140E8" fill-opacity="0.8"/>
+<g clip-path="url(#clip1_6_58)">
+<path d="M1879 0H-1V1866H1879V0Z" fill="#FCE9FF"/>
+<path d="M1879 373.2L-1 1072.95V816.375L1879 116.625V373.2Z" fill="#F9C9FF"/>
+<path d="M1879 606.45L-1 1306.2V1049.62L1879 349.875V606.45Z" fill="#F6A9FF"/>
+<path d="M1879 839.7L-1 1539.45V1282.87L1879 583.125V839.7Z" fill="#F186FF"/>
+<path d="M1879 1072.95L-1 1772.7V1516.12L1879 816.375V1072.95Z" fill="#EB5DFF"/>
+<path d="M1879 1866H-1V1749.37L1879 1049.62V1866Z" fill="#E415FF"/>
+</g>
+</g>
+<defs>
+<clipPath id="clip0_6_58">
+<rect width="1880" height="1866" rx="55" fill="white"/>
+</clipPath>
+<clipPath id="clip1_6_58">
+<rect width="1880" height="1866" fill="white" transform="translate(-1)"/>
+</clipPath>
+</defs>
 </svg>
