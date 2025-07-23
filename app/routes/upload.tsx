@@ -5,7 +5,7 @@ import {usePuterStore} from "~/lib/puter";
 import {useNavigate} from "react-router";
 import {convertPdfToImage} from "~/lib/pdf2img";
 import {generateUUID} from "~/lib/utils";
-import {prepareInstructions} from "../../constants";
+import {prepareInstructions, AIResponseFormat} from "../../constants";
 
 const Upload = () => {
   const {auth, isLoading, fs, ai, kv} = usePuterStore();
@@ -53,7 +53,7 @@ const Upload = () => {
       companyName,
       jobTitle,
       jobDescription,
-      feedback: null,
+      feedback: "",
     };
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
 
@@ -61,9 +61,8 @@ const Upload = () => {
 
     const feedback = await ai.feedback(
       uploadedFile.path,
-      prepareInstructions({jobTitle, jobDescription, AIResponseFormat: "json"})
+      prepareInstructions({jobTitle, jobDescription, AIResponseFormat})
     );
-
     if (!feedback) return setStatusText("Error: Failed to analyze resume");
 
     const feedbackText =
@@ -71,76 +70,8 @@ const Upload = () => {
         ? feedback.message.content
         : feedback.message.content[0].text;
 
-    console.log("AI Feedback Raw:", feedbackText);
-
-    let parsedFeedback;
-
-    try {
-      parsedFeedback = feedbackText ? JSON.parse(feedbackText) : null;
-    } catch {
-      parsedFeedback = null;
-    }
-
-    if (!parsedFeedback || typeof parsedFeedback !== "object") {
-      parsedFeedback = {
-        ats_compatibility: {rating: 0, comments: "No ATS feedback provided."},
-        overall_rating: 0,
-      };
-    }
-
-    // ✅ Proper mapping with ATS for your Resume.tsx
-    const mappedFeedback = {
-      toneAndStyle: {
-        score: (parsedFeedback.ats_compatibility?.rating ?? 0) * 10,
-        tips:
-          parsedFeedback.specific_improvements?.map((tip: string) => ({
-            type: "improve",
-            tip,
-            explanation: "",
-          })) ?? [],
-      },
-      content: {
-        score: (parsedFeedback.overall_rating ?? 0) * 10,
-        tips:
-          parsedFeedback.recommendations_for_sde_role?.map((tip: string) => ({
-            type: "improve",
-            tip,
-            explanation: "",
-          })) ?? [],
-      },
-      structure: {
-        score: 50,
-        tips: [],
-      },
-      skills: {
-        score: 50,
-        tips:
-          parsedFeedback.strengths?.map((tip: string) => ({
-            type: "good",
-            tip,
-            explanation: "",
-          })) ?? [],
-      },
-      overallScore: (parsedFeedback.overall_rating ?? 0) * 10,
-
-      // ✅ ATS added here properly
-      ATS: {
-        score: (parsedFeedback.ats_compatibility?.rating ?? 0) * 10,
-        tips: [
-          {
-            type: "improve",
-            tip:
-              parsedFeedback.ats_compatibility?.comments ??
-              "Could improve ATS formatting.",
-            explanation: "",
-          },
-        ],
-      },
-    };
-
-    data.feedback = mappedFeedback;
+    data.feedback = JSON.parse(feedbackText);
     await kv.set(`resume:${uuid}`, JSON.stringify(data));
-
     setStatusText("Analysis complete, redirecting...");
     console.log(data);
     navigate(`/resume/${uuid}`);
@@ -225,5 +156,4 @@ const Upload = () => {
     </main>
   );
 };
-
 export default Upload;
